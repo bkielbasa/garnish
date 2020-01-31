@@ -3,9 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"garnish/garnish"
 	"net/http"
 	"net/url"
+
+	"github.com/bkielbasa/garnish/garnish"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module garnish
+module github.com/bkielbasa/garnish
 
 go 1.13
 
