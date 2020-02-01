@@ -1,12 +1,12 @@
 package garnish_test
 
 import (
-	"garnish/garnish"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
 
+	"github.com/bkielbasa/garnish/garnish"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

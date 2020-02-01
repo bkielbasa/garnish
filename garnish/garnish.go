@@ -6,6 +6,7 @@ import (
 	"net/url"
 )
 
+const Xcache = "X-Cache"
 const XcacheHit = "HIT"
 const XcacheMiss = "MISS"
 
@@ -37,7 +38,7 @@ func (g *garnish) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		proxyRW := &responseWriter{
 			proxied: rw,
 		}
-		proxyRW.Header().Set("X-Cache", XcacheMiss)
+		proxyRW.Header().Set(Xcache, XcacheMiss)
 		g.proxy.ServeHTTP(proxyRW, r)
 
 		cc := rw.Header().Get(cacheControl)
@@ -48,7 +49,7 @@ func (g *garnish) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 		return
 	} else {
-		rw.Header().Set("X-Cache", XcacheHit)
+		rw.Header().Set(Xcache, XcacheHit)
 		_, _ = rw.Write(cached)
 	}
 }
