@@ -17,10 +17,10 @@ func TestGarnish_CacheRequest(t *testing.T) {
 	defer stop()
 
 	expectedXCacheHeaders := []string{garnish.XcacheMiss, garnish.XcacheHit}
-	g := garnish.New(url.URL{Scheme: "http", Host: "localhost:8080"})
+	g := garnish.New(url.URL{Scheme: "http", Host: "localhost:8088"})
 
 	for _, expectedHeader := range expectedXCacheHeaders {
-		req := httptest.NewRequest(http.MethodGet, "http://localhost:8080", nil)
+		req := httptest.NewRequest(http.MethodGet, "http://localhost:8088", nil)
 		w := httptest.NewRecorder()
 		g.ServeHTTP(w, req)
 		require.Equal(t, http.StatusOK, w.Code)
@@ -34,11 +34,11 @@ func TestGarnish_NotCacheableMethods(t *testing.T) {
 	defer stop()
 
 	methods := []string{http.MethodPost, http.MethodPut, http.MethodHead, http.MethodDelete, http.MethodTrace}
-	g := garnish.New(url.URL{Scheme: "http", Host: "localhost:8080"})
+	g := garnish.New(url.URL{Scheme: "http", Host: "localhost:8088"})
 
 	for _, method := range methods {
 		t.Run(fmt.Sprintf("test method %s", method), func(t *testing.T) {
-			req := httptest.NewRequest(method, "http://localhost:8080", nil)
+			req := httptest.NewRequest(method, "http://localhost:8088", nil)
 			// the first call
 			w := httptest.NewRecorder()
 			g.ServeHTTP(w, req)
@@ -59,8 +59,8 @@ func TestGarnish_NotCacheableMethods(t *testing.T) {
 func BenchmarkGarnish_ServeHTTP(b *testing.B) {
 	stop := mockServer()
 	defer stop()
-	g := garnish.New(url.URL{Scheme: "http", Host: "localhost:8080"})
-	req := httptest.NewRequest(http.MethodGet, "http://localhost:8080", nil)
+	g := garnish.New(url.URL{Scheme: "http", Host: "localhost:8088"})
+	req := httptest.NewRequest(http.MethodGet, "http://localhost:8088", nil)
 	w := httptest.NewRecorder()
 
 	for i := 0; i < b.N; i++ {
@@ -70,7 +70,7 @@ func BenchmarkGarnish_ServeHTTP(b *testing.B) {
 
 func mockServer() func() {
 	m := http.NewServeMux()
-	s := http.Server{Addr: ":8080", Handler: m}
+	s := http.Server{Addr: ":8088", Handler: m}
 	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "max-age=100")
 		_, _ = w.Write([]byte("OK"))
