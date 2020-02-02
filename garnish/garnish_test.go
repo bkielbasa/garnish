@@ -44,6 +44,7 @@ func mockServer() func() {
 	m := http.NewServeMux()
 	s := http.Server{Addr: ":8080", Handler: m}
 	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "max-age=100")
 		_, _ = w.Write([]byte("OK"))
 	})
 
