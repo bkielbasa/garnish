@@ -28,6 +28,7 @@ func New(url url.URL) *garnish {
 func (g *garnish) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	// only GET requests should be cached
 	if r.Method != http.MethodGet {
+		rw.Header().Set(Xcache, XcacheMiss)
 		g.proxy.ServeHTTP(rw, r)
 		return
 	}
