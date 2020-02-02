@@ -81,6 +81,12 @@ func mockServer() func() {
 	}()
 
 	return func() {
-		_ = s.Close()
+		panicOnErr(s.Close())
+	}
+}
+
+func panicOnErr(err error) {
+	if err != nil {
+		panic(err)
 	}
 }
