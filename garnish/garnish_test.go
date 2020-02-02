@@ -33,7 +33,7 @@ func TestGarnish_NotCacheableMethods(t *testing.T) {
 	stop := mockServer()
 	defer stop()
 
-	methods := []string{http.MethodPost, http.MethodPut, http.MethodHead, http.MethodDelete, http.MethodTrace}
+	methods := []string{http.MethodPost, http.MethodPut}
 	g := garnish.New(url.URL{Scheme: "http", Host: "localhost:8088"})
 
 	for _, method := range methods {
