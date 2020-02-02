@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
+	"time"
 
 	"github.com/bkielbasa/garnish/garnish"
 	"github.com/stretchr/testify/assert"
@@ -77,6 +78,8 @@ func mockServer() func() {
 	go func() {
 		_ = s.ListenAndServe()
 	}()
+
+	time.Sleep(time.Millisecond * 10)
 
 	return func() {
 		panicOnErr(s.Close())
