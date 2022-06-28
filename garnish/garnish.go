@@ -10,6 +10,11 @@ const Xcache = "X-Cache"
 const XcacheHit = "HIT"
 const XcacheMiss = "MISS"
 
+/**
+  Cache .-----request---->> Garnish (Cache GET requests) .-------request------>> original Server
+      <<-----response-----.                             <<-------response------.
+*/
+
 type garnish struct {
 	c     *cache
 	proxy *httputil.ReverseProxy
@@ -35,6 +40,7 @@ func (g *garnish) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	u := r.URL.String()
 	cached := g.c.get(u)
+	//if cached, return the cached data
 	if cached != nil {
 		rw.Header().Set(Xcache, XcacheHit)
 		_, _ = rw.Write(cached)
@@ -44,11 +50,13 @@ func (g *garnish) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	proxyRW := &responseWriter{
 		proxied: rw,
 	}
+
 	proxyRW.Header().Set(Xcache, XcacheMiss)
 	g.proxy.ServeHTTP(proxyRW, r)
 
 	cc := rw.Header().Get(cacheControl)
 	toCache, duration := parseCacheControl(cc)
+	//check if it needs cache
 	if toCache {
 		g.c.store(u, proxyRW.body, duration)
 	}

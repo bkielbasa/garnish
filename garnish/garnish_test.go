@@ -13,13 +13,16 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+//running a HTTP server in the background which listen on port 8080
+//and return a response with Cache-Control header
 func TestGarnish_CacheRequest(t *testing.T) {
 	stop := mockServer()
-	defer stop()
+	defer stop() //stop will run when we're finished
 
 	expectedXCacheHeaders := []string{garnish.XcacheMiss, garnish.XcacheHit}
 	g := garnish.New(url.URL{Scheme: "http", Host: "localhost:8088"})
 
+	// send the request twice to get one miss and one hit
 	for _, expectedHeader := range expectedXCacheHeaders {
 		req := httptest.NewRequest(http.MethodGet, "http://localhost:8088", nil)
 		w := httptest.NewRecorder()
@@ -28,11 +31,13 @@ func TestGarnish_CacheRequest(t *testing.T) {
 		xcache := w.Header().Get("X-Cache")
 		assert.Equal(t, expectedHeader, xcache)
 	}
+	//stop will run here
 }
 
+//Only cache get request
 func TestGarnish_NotCacheableMethods(t *testing.T) {
 	stop := mockServer()
-	defer stop()
+	defer stop() //stop will run when we're finished
 
 	methods := []string{http.MethodPost, http.MethodPut, http.MethodHead, http.MethodDelete, http.MethodTrace}
 	g := garnish.New(url.URL{Scheme: "http", Host: "localhost:8088"})
@@ -55,6 +60,7 @@ func TestGarnish_NotCacheableMethods(t *testing.T) {
 			assert.Equal(t, garnish.XcacheMiss, xcache)
 		})
 	}
+	//stop will run here
 }
 
 func BenchmarkGarnish_ServeHTTP(b *testing.B) {
@@ -67,6 +73,7 @@ func BenchmarkGarnish_ServeHTTP(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		g.ServeHTTP(w, req)
 	}
+	//stop will run here
 }
 
 func mockServer() func() {

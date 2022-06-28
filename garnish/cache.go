@@ -23,6 +23,7 @@ type cache struct {
 	data  map[string]data
 }
 
+//The cache keeps the data in a map
 func (c *cache) store(key string, rawData []byte, timeout time.Duration) {
 	d := data{
 		data: rawData,
