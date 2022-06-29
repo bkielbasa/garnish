@@ -35,7 +35,6 @@ func parseCacheControl(cc string) (cache bool, duration time.Duration) {
 			if err != nil {
 				return false, 0
 			}
-
 			cache = true
 			duration = time.Duration(d) * time.Second
 		}
@@ -46,7 +45,6 @@ func parseCacheControl(cc string) (cache bool, duration time.Duration) {
 			if err != nil {
 				return false, 0
 			}
-
 			cache = true
 			duration = time.Duration(d) * time.Second
 		}
