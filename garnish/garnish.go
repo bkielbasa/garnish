@@ -58,8 +58,9 @@ func (g *garnish) ServeHTTP(rw http.ResponseWriter, r *http.Request, serverAddre
 	}
 
 	// if not cached, should ask for the original server
-	// change from http connection to scion
+	rw.Header().Set(Xcache, XcacheMiss)
 
+	// change from http connection to scion
 	// for a server, the proxy is like a client, so:
 	addr, err := pan.ResolveUDPAddr(serverAddress)
 	if err != nil {
@@ -90,22 +91,5 @@ func (g *garnish) ServeHTTP(rw http.ResponseWriter, r *http.Request, serverAddre
 	if toCache {
 		g.c.store(u, data, duration)
 	}
-
-	//if not cached, should ask for the original server
-	//change to scion
-
-	//proxyRW := &responseWriter{
-	//	proxied: rw,
-	//}
-	//
-	//proxyRW.Header().Set(Xcache, XcacheMiss)
-	//g.proxy.ServeHTTP(proxyRW, r)
-	//
-	//cc := rw.Header().Get(cacheControl)
-	//toCache, duration := parseCacheControl(cc)
-	////check if it needs cache
-	//if toCache {
-	//	g.c.store(u, proxyRW.body, duration)
-	//}
 
 }
