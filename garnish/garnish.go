@@ -16,7 +16,7 @@ const XcacheHit = "HIT"
 const XcacheMiss = "MISS"
 
 /**
-  Cache .-----request---->> Garnish (Cache GET requests) .-------request------>> original Server
+  Client .-----request---->> Garnish (Cache GET requests) .-------request------>> original Server
       <<-----response-----.                             <<-------response------.
 */
 
