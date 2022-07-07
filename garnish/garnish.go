@@ -79,7 +79,7 @@ func (g *garnish) ServeHTTP(rw http.ResponseWriter, r *http.Request, serverAddre
 		fmt.Println("SetReadDeadline error")
 		return
 	}
-	n, err := conn.Read(buffer)
+	n, err := conn.Read(buffer) //read to this buffer
 	if err != nil {
 		fmt.Println("read from server error")
 		return

@@ -17,10 +17,12 @@ import (
 
 func TestGarnish_CacheRequest(t *testing.T) {
 	var listen pan.IPPortValue
+	
 	err := listen.Set("18-ffaa:1:fc1,147.28.145.13:5000")
 	if err != nil {
 		return
 	}
+
 	stop := mockServer(listen.Get())
 	defer stop() //stop will run when we're finished
 
@@ -48,16 +50,16 @@ func mockServer(listen netaddr.IPPort) func() {
 	defer conn.Close()
 	fmt.Println(conn.LocalAddr())
 	buffer := make([]byte, 16*1024)
-	n, from, err := conn.ReadFrom(buffer)
+	_, from, err := conn.ReadFrom(buffer)
 	if err != nil {
 		fmt.Printf("read error")
 	}
 	msg := fmt.Sprintf("This is the data in server!")
-	n, err = conn.WriteTo([]byte(msg), from)
+	_, err = conn.WriteTo([]byte(msg), from)
 	if err != nil {
 		fmt.Printf("write error")
 	}
-	fmt.Printf("Wrote %d bytes.\n", n)
+	fmt.Printf("Wrote %d bytes.\n", 1)
 	time.Sleep(time.Millisecond * 10)
 	return func() {
 		panicOnErr(err)
